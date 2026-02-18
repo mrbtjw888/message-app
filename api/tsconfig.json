@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "baseUrl": "./", // Set to the root of your project
+    "paths": {
+      "@/*": ["src/*"] // Map @ to the src directory
+    }
+  }
+}
