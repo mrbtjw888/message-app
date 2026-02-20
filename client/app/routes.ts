@@ -7,14 +7,20 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  index("routes/index.tsx"),
-  route("account", "routes/account.tsx"),
-  route(":username", "routes/user.tsx"),
-  route(":username/status/:statusId", "routes/status.tsx"),
-  route(":username/liked", "routes/user-liked.tsx")
+  route("/.well-known/*", "routes/well-known.tsx"),
+  layout("layout/AppLayout.tsx", [
+    index("routes/index.tsx"),
+    route("account", "routes/account.tsx"),
+    route("users/:username", "routes/user.tsx"),
+    route("users/:username/likes", "routes/user-likes.tsx"),
+    route("message/:messageId", "routes/message.tsx"),
+    route("message/create", "routes/create-message.tsx")
+  ]),
 
-  // layout("layout/auth.tsx", [
-  //   route("login", "./auth/login.tsx"),
-  //   route("register", "./auth/register.tsx"),
-  // ]),
+  layout("layout/AuthLayout.tsx", [
+    route("login", "routes/login.tsx"),
+    route("signup", "routes/signup.tsx"),
+
+  ])
+
 ] satisfies RouteConfig;

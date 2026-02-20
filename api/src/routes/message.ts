@@ -4,11 +4,11 @@ import { zValidator } from '@hono/zod-validator'
 import { requireAuth, } from '@/middlewares/auth'
 import { and, desc, eq } from 'drizzle-orm'
 import { db } from '@/db'
-import { message } from '@/db/schema'
-import { Variables } from '@/types'
+import { message, user } from '@/db/schema'
+import { AppEnv } from '@/types'
 
 
-const messageRouter = new Hono<{ Variables: Variables }>()
+const messageRouter = new Hono<AppEnv>()
 
 const messageSchema = z.object({
   content: z.string().min(1),
@@ -35,8 +35,20 @@ messageRouter.get('/message/:id', async (c) => {
   if (isNaN(id)) return c.json({ error: 'Invalid ID format' }, 400)
 
   const getMessage = await db
-    .select()
+    .select({
+      id: message.id,
+      content: message.content,
+      likeCount: message.likeCount,
+      createdAt: message.createdAt,
+      user: {
+        id: user.id,
+        name: user.name,
+        image: user.image,
+    }
+
+    })
     .from(message)
+    .leftJoin(user, eq(message.userId, user.id))
     .where(eq(message.id, id))
     .limit(1);
 

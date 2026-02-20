@@ -7,9 +7,164 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
 
-  @media (prefers-color-scheme: dark) {
+/*  @media (prefers-color-scheme: dark) {
     color-scheme: dark;
-  }
+  }*/
+}
+
+
+
+/* =========================
+   Base Theme (Pixiv-inspired Minimal)
+   ========================= */
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f8fafc;
+  --color-border: #e5e7eb;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-primary: #0096fa; /* pixiv-like blue */
+  --color-primary-hover: #0077cc;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Layout helpers */
+.app-container {
+  @apply min-h-screen flex flex-col;
+}
+
+.main-content {
+  @apply flex-1 w-full max-w-7xl mx-auto px-6 py-8;
+}
+
+/* Header */
+.app-header {
+  @apply sticky top-0 z-50 w-full border-b backdrop-blur-sm;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: var(--color-border);
+}
+
+.header-inner {
+  @apply  mx-auto px-6 h-14 flex items-center justify-between;
+}
+
+.nav-link {
+  @apply text-sm font-medium text-slate-600 hover:text-black transition-colors;
+}
+
+.nav-link-active {
+  @apply text-black;
+}
+
+/* Buttons */
+.btn-primary {
+  @apply px-4 py-2 rounded-xl text-sm font-medium transition-all;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Card */
+.card {
+  @apply bg-white border rounded-2xl p-5 shadow-sm transition-all;
+  border-color: var(--color-border);
+}
+
+.card:hover {
+  @apply shadow-md;
+}
+
+/* Footer */
+.app-footer {
+  @apply border-t mt-12;
+  border-color: var(--color-border);
+}
+
+.footer-inner {
+  @apply max-w-5xl mx-auto px-6 py-6 text-sm text-slate-500 flex justify-between;
+}
+
+
+/* =========================
+   Auth Styles
+   ========================= */
+
+.auth-wrapper {
+  @apply min-h-screen flex items-center justify-center px-6;
+  background-color: #f8fafc;
+}
+
+.auth-card {
+  @apply w-full max-w-md bg-white rounded-2xl p-8 border shadow-sm;
+  border-color: #e5e7eb;
+}
+
+.auth-title {
+  @apply text-2xl font-semibold tracking-tight mb-6 text-center;
+}
+
+.form-group {
+  @apply flex flex-col gap-2 mb-4;
+}
+
+.form-label {
+  @apply text-sm font-medium text-slate-700;
+}
+
+.form-input {
+  @apply w-full px-4 py-2 rounded-xl border text-sm outline-none transition-all;
+  border-color: #e5e7eb;
+}
+
+.form-input:focus {
+  @apply ring-2 ring-blue-500 border-blue-500;
+}
+
+.input-error {
+  @apply border-red-500 ring-2 ring-red-500;
+}
+
+.error-text {
+  @apply text-sm text-red-500 mt-1;
+}
+
+.auth-error-box {
+  @apply mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2;
+}
+
+.auth-button {
+  @apply w-full py-2.5 rounded-xl text-sm font-medium transition-all;
+  background-color: #0096fa;
+  color: white;
+}
+
+.auth-button:hover {
+  background-color: #0077cc;
+}
+
+.auth-button:disabled {
+  @apply opacity-60 cursor-not-allowed;
+}
+
+.auth-footer {
+  @apply mt-6 text-sm text-center text-slate-500;
+}
+
+.auth-link {
+  @apply text-blue-600 hover:underline font-medium;
 }

@@ -12,14 +12,14 @@ export const message = pgTable("message", {
     }),
 
   content: text("content").notNull(),
-
+  likeCount: integer("like_count").default(0).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
-}, (table) => ({
-  userIdx: index("messages_user_idx").on(table.userId),
-  createdIdx: index("messages_created_at_idx").on(table.createdAt),
-}));
+}, (table) => [
+  index("messages_user_idx").on(table.userId),
+  index("messages_created_at_idx").on(table.createdAt),
+]);
 
 export const messageRelations = relations(message, ({ one, many }) => ({
   user: one(user, {

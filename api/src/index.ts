@@ -6,28 +6,23 @@ import { logger } from 'hono/logger'
 import messageRouter from '@/routes/message'
 import likeRouter from '@/routes/like'
 import userRouter from '@/routes/user'
+import { AppEnv } from '@/types'
 
-
-const app = new Hono<{
-  Variables: {
-    user: typeof auth.$Infer.Session.user | null;
-    session: typeof auth.$Infer.Session.session | null
-  }
-}>();
+const app = new Hono<AppEnv>();
 
 app.use('*', logger()) 
 
-app.use(
-  "/api/auth/*", // or replace with "*" to enable cors for all routes
-  cors({
-    origin: "*", // replace with your origin
-    allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["POST", "GET", "DELETE", "OPTIONS"],
-    exposeHeaders: ["Content-Length"],
-    maxAge: 600,
-    credentials: true,
-  }),
-);
+// app.use(
+//   "/api/*", // or replace with "*" to enable cors for all routes
+//   cors({
+//     origin: "http://localhost:5173", // replace with your origin
+//     allowHeaders: ["Content-Type", "Authorization"],
+//     allowMethods: ["POST", "GET", "DELETE", "OPTIONS"],
+//     exposeHeaders: ["Content-Length"],
+//     maxAge: 600,
+//     credentials: true,
+//   }),
+// );
 
 app.use("*", async (c, next) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });

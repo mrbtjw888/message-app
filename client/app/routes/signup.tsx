@@ -3,21 +3,23 @@ import { Form, Link, useNavigate } from "react-router"
 import { authClient } from "lib/auth-client"
 
 
-export default function SignIn() {
+export default function SignUp() {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   const validate = () => {
+    if (!name.trim()) return "Name is required"
     if (!email.includes("@")) return "Invalid email address"
-    if (!password) return "Password is required"
+    if (password.length < 6) return "Password must be at least 6 characters"
     return null
   }
 
-  const signIn = async (e: React.FormEvent) => {
+  const signUp = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const validationError = validate()
@@ -28,13 +30,17 @@ export default function SignIn() {
 
     setError(null)
 
-    await authClient.signIn.email(
-      { email, password },
+    await authClient.signUp.email(
+      { email, password, name },
       {
-        onRequest: () => setLoading(true),
-        onSuccess: () => navigate("/"),
+        onRequest: () => {
+          setLoading(true)
+        },
+        onSuccess: () => {
+          navigate("/")
+        },
         onError: (ctx) => {
-          setError(ctx.error.message || "Invalid credentials")
+          setError(ctx.error.message || "Something went wrong")
           setLoading(false)
         },
       }
@@ -43,11 +49,21 @@ export default function SignIn() {
 
   return (
     <div>
-      <h2 className="auth-title">Welcome back</h2>
+      <h2 className="auth-title">Create your account</h2>
 
       {error && <div className="auth-error-box">{error}</div>}
 
-      <Form onSubmit={signIn}>
+      <Form onSubmit={signUp}>
+        <div className="form-group">
+          <label className="form-label">Name</label>
+          <input
+            className={`form-input ${!name && error ? "input-error" : ""}`}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
         <div className="form-group">
           <label className="form-label">Email</label>
           <input
@@ -69,14 +85,14 @@ export default function SignIn() {
         </div>
 
         <button className="auth-button" type="submit" disabled={loading}>
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Creating account..." : "Sign Up"}
         </button>
       </Form>
 
       <div className="auth-footer">
-        Don’t have an account?{" "}
-        <Link to="/signup" className="auth-link">
-          Create one
+        Already have an account?{" "}
+        <Link to="/login" className="auth-link">
+          Sign in
         </Link>
       </div>
     </div>

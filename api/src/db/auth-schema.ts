@@ -6,7 +6,8 @@ import { messageLike } from "./like-schema"
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
-  username: text("username").notNull(),
+  name: text("name").notNull(),
+  bio: text("bio"),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),

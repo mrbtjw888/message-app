@@ -3,19 +3,16 @@ import { Link } from "react-router";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the home page!</p>
-        <ul>
-      
-          <li><Link to="/account">account</Link></li>
-          <li><Link to="/login" >login</Link></li>
-          <li><Link to="/sign-up" >item</Link></li>
-          <li><Link to="/jacker" >jacker</Link></li>
-          <li><Link to="/jacker/status/1" >status 1</Link></li>
-          <li><Link to="/jacker/liked" >liked</Link></li>
-          <li><Link to="/sign-up" >item</Link></li>
-        </ul>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold tracking-tight">
+        Welcome
+      </h1>
+
+      <div className="card">
+        <p className="text-slate-700">
+          This is a minimal Pixiv-style layout.
+        </p>
+      </div>
     </div>
-  );
+  )
 }

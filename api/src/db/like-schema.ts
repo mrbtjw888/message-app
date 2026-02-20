@@ -17,12 +17,12 @@ export const messageLike  = pgTable("message_like", {
       .defaultNow()
       .notNull(),
   },
-  (table) => ({
-    pk: primaryKey({ columns: [table.userId, table.messageId] }),
+  (table) => [
+    primaryKey({ columns: [table.userId, table.messageId] }),
 
-    messageIdx: index("message_like_user_idx").on(table.messageId),
-    userIdx: index("message_like_message_idx").on(table.userId),
-  })
+    index("message_like_user_idx").on(table.messageId),
+    index("message_like_message_idx").on(table.userId),
+  ]
 );
 
 export const likesRelations = relations(messageLike, ({ one }) => ({
