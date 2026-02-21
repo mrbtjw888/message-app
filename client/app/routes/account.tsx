@@ -42,7 +42,7 @@ export default function Account() {
   const user = session?.user
 
   if (!user) {
-    navigate("/login")
+    window.location.href = "/login"
     return null
   }
 

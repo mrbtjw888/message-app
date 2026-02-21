@@ -30,7 +30,7 @@ export default function CreateMessage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+      <div className="card">
         <h1 className="text-xl font-semibold mb-4">Create Message</h1>
 
         {error && (

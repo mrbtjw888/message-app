@@ -1,9 +1,8 @@
-import { useLoaderData } from "react-router"
-import type { LoaderFunctionArgs } from "react-router"
+import type { Route } from "./+types/message";
 import { messageApi } from "../../lib/api"
 import PostCard from "../components/PostCard"
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const messageId = Number(params.messageId)
 
   if (isNaN(messageId)) {
@@ -11,38 +10,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   const message = await messageApi.getById(messageId)
-
   return message
 }
 
-export async function clientLoader({
-  params,
-}: Route.ClientLoaderArgs) {
-  const res = await fetch(`/api/products/${params.pid}`);
-  const product = await res.json();
-  return product;
-}
 
 
-
-
-
-
-
-export default function MessagePage() {
-  const message = useLoaderData() as Awaited<
-    ReturnType<typeof messageApi.getById>
-  >
+export default function MessagePage({ loaderData }: Route.ComponentProps) {
+  const message = loaderData
 
   return (
     <div className="max-w-2xl mx-auto">
       <PostCard
         id={message.id}
-        username={message.user?.name ?? "unknown"}
+        username={message.user.name}
         content={message.content}
-        likedCount={message.likedCount ?? 0}
+        likeCount={message.likeCount}
         createdAt={message.createdAt}
-        userImage={message.user?.image ?? "unknown"}
+        userImage={message.user?.image}
       />
     </div>
   )

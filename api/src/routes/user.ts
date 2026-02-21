@@ -2,8 +2,8 @@ import { Hono } from 'hono'
 import { desc, eq, lt, and } from 'drizzle-orm'
 import { db } from '@/db'
 import { user, message, messageLike } from '@/db/schema'
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+
+
 import { AppEnv } from '@/types'
 import { requireAuth, } from '@/middlewares/auth'
 
@@ -19,6 +19,7 @@ userRouter.get('/:username', async (c) => {
             name: user.name,
             bio: user.bio,
             createdAt: user.createdAt,
+            image: user.image
         })
         .from(user)
         .where(eq(user.name, username)) 
@@ -53,7 +54,7 @@ userRouter.get('/:username', async (c) => {
 userRouter.get('/:username/messages', async (c) => {
   const username = c.req.param('username')
   const cursor = c.req.query('cursor')
-  const limit = Number(c.req.query('limit')) || 10
+  const limit = Number(c.req.query('limit')) || 5
 
   // Check user exists
   const foundUser = await db
@@ -72,8 +73,15 @@ userRouter.get('/:username/messages', async (c) => {
       id: message.id,
       content: message.content,
       createdAt: message.createdAt,
+      likeCount: message.likeCount,
+      user: {
+        id: user.id,
+        name: user.name,
+        image: user.image,
+      },
     })
     .from(message)
+    .leftJoin(user, eq(message.userId, user.id))
     .where(
       and(
         eq(message.userId, foundUser[0].id),
@@ -90,7 +98,7 @@ userRouter.get('/:username/messages', async (c) => {
 
   return c.json({
     user: {
-      username: foundUser[0].name,
+      name: foundUser[0].name,
     },
     data: messages,
     nextCursor,
@@ -127,7 +135,7 @@ userRouter.get('/:username/likes', async (c) => {
 
   // Check user
   const foundUser = await db
-    .select({ id: user.id, name: user.name })
+    .select({ id: user.id, name: user.name, image: user.image, })
     .from(user)
     .where(eq(user.name, username))
     .limit(1)
@@ -142,6 +150,7 @@ userRouter.get('/:username/likes', async (c) => {
       id: message.id,
       content: message.content,
       createdAt: message.createdAt,
+      likeCount: message.likeCount,
     })
     .from(messageLike)
     .innerJoin(message, eq(messageLike.messageId, message.id))
@@ -161,7 +170,8 @@ userRouter.get('/:username/likes', async (c) => {
 
   return c.json({
     user: {
-      username: foundUser[0].name,
+      name: foundUser[0].name,
+      image: foundUser[0].image
     },
     data: likedMessages,
     nextCursor,

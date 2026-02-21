@@ -18,7 +18,7 @@ export default function Header({user}: HeaderProps) {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query.trim()) return;
-    navigate(`/search?q=${encodeURIComponent(query)}`);
+    navigate(`/users/${encodeURIComponent(query)}`);
   };
 
 
@@ -26,7 +26,7 @@ export default function Header({user}: HeaderProps) {
     <header className="app-header">
       <div className="header-inner">
         <Link to="/" className="text-lg font-semibold tracking-tight">
-          SRE Message
+          Message Board
         </Link>
 
         <form

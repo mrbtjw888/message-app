@@ -1,71 +1,102 @@
+import { Heart, Trash2  } from "lucide-react"
 import { useState } from "react"
+import { formatDate } from "lib/formatDate"
+import { messageApi } from "lib/api"
 
 type PostCardProps = {
   id: number
   username: string
   content: string
   createdAt: string
-  userImage: string
-  likedCount: number
+  userImage?: string
+  likeCount: number
   initiallyLiked?: boolean
-  onLike?: (id: number, liked: boolean) => Promise<void>
+  isOwner?: boolean
+  onDelete?: (id: number) => void
 }
 
 export default function PostCard({
   id,
   username,
   content,
-  likedCount,
-  initiallyLiked = false,
-  onLike,
+  createdAt,
+  userImage,
+  likeCount,
+  isOwner = false,
+  onDelete,
 }: PostCardProps) {
-  const [liked, setLiked] = useState(initiallyLiked)
-  const [count, setCount] = useState(likedCount)
+
+  const [count, setCount] = useState(likeCount)
   const [loading, setLoading] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
-  const handleLike = async () => {
-    if (!onLike) return
 
-    setLoading(true)
 
-    const newLiked = !liked
-    setLiked(newLiked)
-    setCount((prev) => (newLiked ? prev + 1 : prev - 1))
+  const handleDelete = async () => {
+    if (!isOwner || deleting) return
+
+    const confirmed = confirm("Delete this message?")
+    if (!confirmed) return
+
+    setDeleting(true)
 
     try {
-      await onLike(id, newLiked)
+      await messageApi.delete(id)
+      onDelete?.(id)
     } catch {
-      // revert on failure
-      setLiked(!newLiked)
-      setCount((prev) => (newLiked ? prev - 1 : prev + 1))
+      alert("Failed to delete message")
     } finally {
-      setLoading(false)
+      setDeleting(false)
     }
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
-      <div className="mb-3 text-sm font-medium text-slate-700">
-        @{username}
+    <div className="card">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex gap-2 items-center">
+          {userImage && (
+            <img
+              src={userImage}
+              alt={username}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          )}
+
+          <div className="flex gap-2">
+            <div className="text-sm font-medium text-black">
+              {username}
+            </div>
+            <div className="text-sm text-slate-500">
+              {formatDate(createdAt)}
+            </div>
+          </div>
+        </div>
+
+        {isOwner && (
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="text-slate-400 hover:text-red-500 transition"
+          >
+            <Trash2 size={18} />
+          </button>
+        )}
       </div>
 
+      {/* Content */}
       <p className="text-slate-800 text-sm leading-relaxed whitespace-pre-wrap">
         {content}
       </p>
 
-      <div className="mt-4 flex items-center gap-4 text-sm">
-        <button
-          onClick={handleLike}
-          disabled={loading}
-          className={`flex items-center gap-1 transition ${
-            liked
-              ? "text-red-500"
-              : "text-slate-500 hover:text-red-500"
-          }`}
-        >
-          heart
-          <span>{count}</span>
+      {/* Footer */}
+      <div className="mt-4 flex items-center gap-2 text-sm">
+        <button>
+          <Heart
+            size={18}
+          />
         </button>
+        <span>{count}</span>
       </div>
     </div>
   )

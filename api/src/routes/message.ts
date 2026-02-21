@@ -20,6 +20,7 @@ messageRouter.post('/message', requireAuth, zValidator('json', messageSchema), a
   const { content } = c.req.valid('json')
   const user = c.get('user')
   
+  
 	const newMessage = await db
 		.insert(message)
 		.values({ content, userId: user.id })

@@ -32,4 +32,22 @@ export const messageApi = {
     apiFetch(`/message/${id}`, {
       method: "GET",
     }),
+  delete: (id: number) =>
+    apiFetch(`/message/${id}`, {
+      method: "DELETE",
+    }),
 }
+
+export const userApi = {
+  getUserMessage: (username: string, cursor?: string) => {
+    const query = new URLSearchParams({
+      limit: "5",
+      ...(cursor ? { cursor } : {}),
+    }).toString()
+
+    return apiFetch(`/users/${username}/messages?${query}`, {
+      method: "GET",
+    })
+  },
+}
+

@@ -15,17 +15,17 @@ export function formatDate(createdAt: string) {
 
   // Less than 1 hour show minutes
   if (diffMinutes < 60) {
-    return `${diffMinutes} min${diffMinutes > 1 ? "s" : ""} ago`;
+    return `${diffMinutes}min`;
   }
 
   // Less than 24 hours show hours
   if (diffHours < 24) {
-    return `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
+    return `${diffHours}h`;
   }
 
   // Less than or equal to 3 days show days
   if (diffDays <= 3) {
-    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+    return `${diffDays} day${diffDays > 1 ? "s" : ""}`;
   }
 
   // Otherwise full date

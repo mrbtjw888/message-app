@@ -1,5 +1,3 @@
-import React from 'react';
-import { Link } from "react-router";
 
 export default function Home() {
   return (
@@ -10,8 +8,15 @@ export default function Home() {
 
       <div className="card">
         <p className="text-slate-700">
-          This is a minimal Pixiv-style layout.
+          This is a message board app
         </p>
+        <p className="text-slate-700">
+          - You can create and view post
+        </p>
+        <p className="text-slate-700">
+          - Use search to find user profile
+        </p>
+
       </div>
     </div>
   )

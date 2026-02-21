@@ -12,17 +12,17 @@ const app = new Hono<AppEnv>();
 
 app.use('*', logger()) 
 
-// app.use(
-//   "/api/*", // or replace with "*" to enable cors for all routes
-//   cors({
-//     origin: "http://localhost:5173", // replace with your origin
-//     allowHeaders: ["Content-Type", "Authorization"],
-//     allowMethods: ["POST", "GET", "DELETE", "OPTIONS"],
-//     exposeHeaders: ["Content-Length"],
-//     maxAge: 600,
-//     credentials: true,
-//   }),
-// );
+app.use(
+  "/api/*", // or replace with "*" to enable cors for all routes
+  cors({
+    origin: "http://localhost:5173", // replace with your origin
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "DELETE", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
 
 app.use("*", async (c, next) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
@@ -57,7 +57,7 @@ app.route('/api', messageRouter)
 
 app.route('/api', likeRouter)
 
-app.route('/api/user', userRouter)
+app.route('/api/users', userRouter)
 
 export default { 
   port: 3000, 

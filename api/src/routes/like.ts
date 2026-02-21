@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, sql } from 'drizzle-orm'
 import { db } from '@/db'
-import { messageLike } from '@/db/schema'
+import { messageLike, message } from '@/db/schema'
 import { requireAuth } from '@/middlewares/auth'
 
 import { AppEnv } from '@/types'
